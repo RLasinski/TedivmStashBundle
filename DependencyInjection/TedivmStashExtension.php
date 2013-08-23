@@ -1,10 +1,8 @@
 <?php
-
 namespace Tedivm\StashBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -20,6 +18,10 @@ use Symfony\Component\Config\Definition\Processor;
  */
 class TedivmStashExtension extends Extension
 {
+    /**
+     * @param array            $configs
+     * @param ContainerBuilder $container
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -37,7 +39,7 @@ class TedivmStashExtension extends Extension
 
         $caches = array();
         $options = array();
-        foreach($config['caches'] as $name => $cache) {
+        foreach ($config['caches'] as $name => $cache) {
             $caches[$name] = sprintf('stash.%s_cache', $name);
             $options[$name] = $cache;
             $this->addCacheService($name, $cache, $container);
@@ -48,7 +50,12 @@ class TedivmStashExtension extends Extension
         $container->setParameter('stash.default_cache', $config['default_cache']);
     }
 
-    protected function addCacheService($name, $cache, $container)
+    /**
+     * @param                  $name
+     * @param array            $cache
+     * @param ContainerBuilder $container
+     */
+    protected function addCacheService($name, array $cache, ContainerBuilder $container)
     {
         $logqueries = $container->getParameter('stash.logging');
 
