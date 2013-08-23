@@ -96,6 +96,10 @@ class DoctrineAdapter implements DoctrineCacheInterface
 
         $cache = $this->cacheService->getItem($id);
 
+        // $lifeTime = 0 means infinite (@see DoctrineCacheInterface), in Stash $lifeTime = null means infinite
+        if ($lifeTime === 0) {
+            $lifeTime = null;
+        }
         return $cache->set($data, $lifeTime);
     }
 

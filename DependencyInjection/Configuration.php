@@ -31,6 +31,9 @@ class Configuration implements ConfigurationInterface
             'ttl'               => 300,
             'namespace'         => null,
         ),
+        'Xcache' => array(
+            'ttl'               => 300
+        ),
     );
 
     public function getConfigTreeBuilder()
