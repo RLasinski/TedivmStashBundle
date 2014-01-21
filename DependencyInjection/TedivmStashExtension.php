@@ -32,10 +32,10 @@ class TedivmStashExtension extends Extension
 
         $container->setAlias('cache', sprintf('stash.%s_cache', $config['default_cache']));
 
-        $lq = isset($config['logging'])
-            ? $config['logging']
+        $queryLog = isset($config['query_log'])
+            ? $config['query_log']
             : (in_array($container->getParameter('kernel.environment'), array('dev', 'test')));
-        $container->setParameter('stash.logging', $lq);
+        $container->setParameter('stash.query_log', $queryLog);
 
         $caches = array();
         $options = array();
@@ -57,7 +57,7 @@ class TedivmStashExtension extends Extension
      */
     protected function addCacheService($name, array $cache, ContainerBuilder $container)
     {
-        $logqueries = $container->getParameter('stash.logging');
+        $queryLog = $container->getParameter('stash.query_log');
 
         $handlers = $cache['handlers'];
         unset($cache['handlers']);
@@ -87,21 +87,23 @@ class TedivmStashExtension extends Extension
             ->setArguments(array(
                 $name
             ))
-            ->addMethodCall('enableQueryLogging', array($logqueries))
+            ->addMethodCall('enableQueryLogging', array($queryLog))
             ->setAbstract(false)
         ;
 
-        $container
+        $cacheDefinition = $container
             ->setDefinition(sprintf('stash.%s_cache', $name), new DefinitionDecorator('stash.cache'))
             ->setArguments(array(
                 $name,
                 new Reference(sprintf('stash.handler.%s_cache', $name)),
                 new Reference(sprintf('stash.logger.%s_cache', $name))
-            ))
-            ->setAbstract(false)
-        ;
+            ))->setAbstract(false);
 
-        if(interface_exists("\\Doctrine\\Common\\Cache\\Cache") && $doctrine) {
+        if ($cache['logService'] !== null) {
+            $cacheDefinition->addMethodCall('setLogger', array(new Reference($cache['logService'])));
+        }
+
+        if (interface_exists("\\Doctrine\\Common\\Cache\\Cache") && $doctrine) {
             $container
                 ->setDefinition(sprintf('stash.adapter.doctrine.%s_cache', $name), new DefinitionDecorator('stash.adapter.doctrine'))
                 ->setArguments(array(
@@ -111,7 +113,7 @@ class TedivmStashExtension extends Extension
             ;
         }
 
-        if($session) {
+        if ($session) {
             $container
                 ->setDefinition(sprintf('stash.adapter.session.%s_cache', $name), new DefinitionDecorator('stash.adapter.session'))
                 ->setArguments(array(

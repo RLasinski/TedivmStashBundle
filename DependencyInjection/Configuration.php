@@ -71,7 +71,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->children()
                 ->scalarNode('default_cache')->end()
-                ->booleanNode('logging')->end()
+                ->booleanNode('query_log')->end()
             ->end()
             ->fixXmlConfig('cache')
             ->append($this->getCachesNode())
@@ -106,6 +106,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('registerDoctrineAdapter')->defaultFalse()->end()
                 ->booleanNode('registerSessionHandler')->defaultFalse()->end()
                 ->booleanNode('inMemory')->defaultTrue()->end()
+                ->scalarNode('logService')->defaultNull()->end()
             ;
 
             foreach($handlers as $handler) {
