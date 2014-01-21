@@ -1,7 +1,7 @@
-TedivmStashBundle
-=================
+# TedivmStashBundle [![Build Status](https://secure.travis-ci.org/tedivm/TedivmStashBundle.png?branch=master)](http://travis-ci.org/tedivm/TedivmStashBundle)
 
-[![Build Status](https://secure.travis-ci.org/tedivm/TedivmStashBundle.png?branch=master)](http://travis-ci.org/tedivm/TedivmStashBundle)
+[![Latest Stable Version](https://poser.pugx.org/tedivm/stash-bundle/v/stable.png)](https://packagist.org/packages/tedivm/stash-bundle)
+[![Total Downloads](https://poser.pugx.org/tedivm/stash-bundle/downloads.png)](https://packagist.org/packages/tedivm/stash-bundle)
 
 The **TedivmStashBundle** integrates the [Stash caching library](https://github.com/tedivm/Stash) into Symfony, providing a
 powerful abstraction for a range of caching engines. This bundle provides a caching service, adds Stash information to
@@ -18,7 +18,7 @@ Add the bundle using composer, either by requiring it on the command line:
 or by adding it directly to your `composer.json` file:
 
     "require": {
-        "tedivm/stash-bundle": "dev-master"
+        "tedivm/stash-bundle": "0.3.*"
     }
 
 Add the bundle to `app/AppKernel.php`:
